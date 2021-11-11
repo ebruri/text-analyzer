@@ -4,7 +4,7 @@ function noInputtedWord(word, text) {
   return ((text.trim().length === 0) || (word.trim().length === 0));
 }
 
-// Business Logic
+// // Business Logic
 
 function wordCounter(text) {
   if (text.trim().length === 0) {
@@ -34,26 +34,19 @@ function numberOfOccurrencesInText(word, text) {
   return wordCount;
 }
 
-// UI Logic
-
-function boldPassage(word, text) {
-  if (noInputtedWord(word, text)) {
-    return "";
-  }
-  let htmlString = "<p>";
-  let textArray = text.split(" ");
-  textArray.forEach(function(element, index) {
-    if (element.toLowerCase().includes(word.toLowerCase())) {
-      htmlString = htmlString.concat("<b>" + element + "</b>");
-    } else {
-      htmlString = htmlString.concat(element);
-    }
-    if (index !== (textArray.length - 1)) {
-      htmlString = htmlString.concat(" ");
+function ommitOffensiveWord(text) {
+  const offensiveWords = text.split(" "); 
+  let newArray = [];
+  offensiveWords.forEach(function(word) {
+    if (!(word === "zoinks" || word === "muppeteer" || word === "biffaroni" || word === "loopdaloo")) {
+    newArray.push(word);
     }
   });
-  return htmlString + "</p>";
-}
+  return newArray.join(" "); 
+  }
+
+
+// UI Logic
 
 $(document).ready(function(){
   $("form#word-counter").submit(function(event){
@@ -62,8 +55,11 @@ $(document).ready(function(){
     const word = $("#word").val();
     const wordCount = wordCounter(passage);
     const occurrencesOfWord = numberOfOccurrencesInText(word, passage);
+    const cleanPassage = ommitOffensiveWord(passage);
+    $("#clean-passage").html(cleanPassage);
     $("#total-count").html(wordCount);
     $("#selected-count").html(occurrencesOfWord);
-    $("#bolded-passage").html(boldPassage(word, passage));
-  });
+    });
 });
+
+
